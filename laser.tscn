@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://dhqrq2qjsax4q"]
+
+[ext_resource type="Script" path="res://laser.gd" id="1_bki7i"]
+
+[node name="Laser" type="Node2D"]
+position = Vector2(96, 0)
+script = ExtResource("1_bki7i")
+collision_mask = 128
+
+[node name="DebugLine" type="Line2D" parent="."]
