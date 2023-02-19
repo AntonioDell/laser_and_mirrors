@@ -1,11 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://uwltc4mviykq"]
+[gd_scene load_steps=7 format=3 uid="uid://uwltc4mviykq"]
 
 [ext_resource type="Texture2D" uid="uid://dhb3n2ieel2f5" path="res://checker_tile.png" id="1_pmxog"]
-[ext_resource type="Script" path="res://gun.gd" id="2_doarq"]
-[ext_resource type="PackedScene" uid="uid://bjnb518rci43t" path="res://rotate_component.tscn" id="2_ijcq1"]
+[ext_resource type="PackedScene" uid="uid://cr1y4uuod0gr7" path="res://gun.tscn" id="2_0y7o7"]
 [ext_resource type="Texture2D" uid="uid://cttygnwjyhldn" path="res://icon.svg" id="3_p6sdv"]
-[ext_resource type="PackedScene" uid="uid://dhqrq2qjsax4q" path="res://laser.tscn" id="3_w6e6y"]
-[ext_resource type="PackedScene" uid="uid://cqd5rlokq1sqm" path="res://reflection_component.tscn" id="6_tbb2m"]
+[ext_resource type="PackedScene" uid="uid://bi42uodgtfk53" path="res://mirror.tscn" id="6_vccxb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hvu0n"]
 resource_name = "Checker"
@@ -16,26 +14,6 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_ely30"]
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_hvu0n")
-
-[sub_resource type="Gradient" id="Gradient_x7kry"]
-offsets = PackedFloat32Array(0)
-colors = PackedColorArray(0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_waosc"]
-gradient = SubResource("Gradient_x7kry")
-width = 32
-height = 32
-
-[sub_resource type="Gradient" id="Gradient_vkoaw"]
-offsets = PackedFloat32Array(0)
-colors = PackedColorArray(0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_kci2j"]
-gradient = SubResource("Gradient_vkoaw")
-height = 16
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_s8qrv"]
-size = Vector2(63.6396, 7.77828)
 
 [node name="Level1" type="Node2D"]
 metadata/_edit_vertical_guides_ = [576.0]
@@ -49,17 +27,7 @@ layer_0/tile_data = PackedInt32Array(131089, 0, 0, 327706, 0, 0, 0, 0, 0, 65536,
 [node name="Player" type="Node2D" parent="."]
 position = Vector2(576, 320)
 
-[node name="Gun" type="Node2D" parent="Player"]
-script = ExtResource("2_doarq")
-
-[node name="Icon" type="Sprite2D" parent="Player/Gun"]
-position = Vector2(80, 0)
-texture = SubResource("GradientTexture2D_waosc")
-
-[node name="Laser" parent="Player/Gun" instance=ExtResource("3_w6e6y")]
-show_debug_line = true
-
-[node name="RotateComponent" parent="Player/Gun" instance=ExtResource("2_ijcq1")]
+[node name="Gun" parent="Player" instance=ExtResource("2_0y7o7")]
 
 [node name="Icon" type="Sprite2D" parent="Player"]
 scale = Vector2(0.5, 0.5)
@@ -67,7 +35,7 @@ texture = ExtResource("3_p6sdv")
 metadata/_edit_lock_ = true
 
 [node name="Enemy" type="Node2D" parent="."]
-position = Vector2(310, 506)
+position = Vector2(66, 589)
 
 [node name="Icon" type="Sprite2D" parent="Enemy"]
 modulate = Color(0.643137, 0.219608, 0.345098, 1)
@@ -75,69 +43,22 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("3_p6sdv")
 metadata/_edit_lock_ = true
 
-[node name="Mirror" type="Node2D" parent="."]
-position = Vector2(328, 166)
-rotation = -0.785398
+[node name="Mirror" parent="." instance=ExtResource("6_vccxb")]
+position = Vector2(390, 218)
+rotation = -0.671053
 
-[node name="Icon" type="Sprite2D" parent="Mirror"]
-texture = SubResource("GradientTexture2D_kci2j")
-metadata/_edit_lock_ = true
+[node name="Mirror2" parent="." instance=ExtResource("6_vccxb")]
+position = Vector2(742, 135)
+rotation = -0.671053
 
-[node name="ReflectionComponent" parent="Mirror" instance=ExtResource("6_tbb2m")]
-collision_layer = 129
+[node name="Mirror3" parent="." instance=ExtResource("6_vccxb")]
+position = Vector2(894, 349)
+rotation = -0.671053
 
-[node name="CollisionShape2D" parent="Mirror/ReflectionComponent" index="0"]
-position = Vector2(0, 3.88922)
-shape = SubResource("RectangleShape2D_s8qrv")
+[node name="Mirror4" parent="." instance=ExtResource("6_vccxb")]
+position = Vector2(648, 563)
+rotation = -0.671053
 
-[node name="Mirror2" type="Node2D" parent="."]
-position = Vector2(312, 568)
-rotation = 4.3895
-
-[node name="Icon" type="Sprite2D" parent="Mirror2"]
-texture = SubResource("GradientTexture2D_kci2j")
-metadata/_edit_lock_ = true
-
-[node name="ReflectionComponent" parent="Mirror2" instance=ExtResource("6_tbb2m")]
-collision_layer = 129
-
-[node name="CollisionShape2D" parent="Mirror2/ReflectionComponent" index="0"]
-position = Vector2(0, 3.88922)
-shape = SubResource("RectangleShape2D_s8qrv")
-
-[node name="Mirror3" type="Node2D" parent="."]
-position = Vector2(579, 580)
-rotation = 2.08567
-
-[node name="Icon" type="Sprite2D" parent="Mirror3"]
-texture = SubResource("GradientTexture2D_kci2j")
-metadata/_edit_lock_ = true
-
-[node name="ReflectionComponent" parent="Mirror3" instance=ExtResource("6_tbb2m")]
-collision_layer = 129
-
-[node name="CollisionShape2D" parent="Mirror3/ReflectionComponent" index="0"]
-position = Vector2(0, 3.88922)
-shape = SubResource("RectangleShape2D_s8qrv")
-
-[node name="Mirror4" type="Node2D" parent="."]
-position = Vector2(796, 175)
-rotation = 0.785398
-
-[node name="Icon" type="Sprite2D" parent="Mirror4"]
-texture = SubResource("GradientTexture2D_kci2j")
-metadata/_edit_lock_ = true
-
-[node name="ReflectionComponent" parent="Mirror4" instance=ExtResource("6_tbb2m")]
-collision_layer = 129
-
-[node name="CollisionShape2D" parent="Mirror4/ReflectionComponent" index="0"]
-position = Vector2(0, 3.88922)
-shape = SubResource("RectangleShape2D_s8qrv")
-
-[connection signal="rotation_registered" from="Player/Gun/RotateComponent" to="Player/Gun" method="_on_rotation_registered"]
-
-[editable path="Mirror/ReflectionComponent"]
-[editable path="Mirror2/ReflectionComponent"]
-[editable path="Mirror3/ReflectionComponent"]
-[editable path="Mirror4/ReflectionComponent"]
+[node name="Mirror5" parent="." instance=ExtResource("6_vccxb")]
+position = Vector2(379, 439)
+rotation = -0.671053

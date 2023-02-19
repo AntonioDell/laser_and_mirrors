@@ -1,0 +1,84 @@
+[gd_scene load_steps=13 format=3 uid="uid://bi42uodgtfk53"]
+
+[ext_resource type="Script" path="res://mirror.gd" id="1_nc1kf"]
+[ext_resource type="PackedScene" uid="uid://cqd5rlokq1sqm" path="res://reflection_component.tscn" id="1_qh2i6"]
+[ext_resource type="PackedScene" uid="uid://bjnb518rci43t" path="res://rotate_component.tscn" id="2_1ab4w"]
+[ext_resource type="PackedScene" uid="uid://k0htuokk723h" path="res://select_component.tscn" id="3_8rd6y"]
+
+[sub_resource type="Gradient" id="Gradient_hlwdr"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0.2, 0.588235, 0.180392)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_5k3wd"]
+gradient = SubResource("Gradient_hlwdr")
+
+[sub_resource type="Gradient" id="Gradient_vkoaw"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_kci2j"]
+gradient = SubResource("Gradient_vkoaw")
+height = 16
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jylgl"]
+size = Vector2(64, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fb2sj"]
+size = Vector2(3, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_135y3"]
+size = Vector2(3, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s8qrv"]
+size = Vector2(58, 8.22156)
+
+[node name="Mirror" type="Node2D"]
+script = ExtResource("1_nc1kf")
+
+[node name="RotateComponent" parent="." instance=ExtResource("2_1ab4w")]
+
+[node name="SelectComponent" parent="." node_paths=PackedStringArray("selection_indicator") instance=ExtResource("3_8rd6y")]
+selection_indicator = NodePath("../SelectionIndicator")
+
+[node name="SelectionIndicator" type="Sprite2D" parent="."]
+scale = Vector2(1.21875, 1.21875)
+texture = SubResource("GradientTexture2D_5k3wd")
+
+[node name="Icon" type="Sprite2D" parent="."]
+texture = SubResource("GradientTexture2D_kci2j")
+metadata/_edit_lock_ = true
+
+[node name="Wall1" type="StaticBody2D" parent="."]
+collision_layer = 129
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall1"]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_jylgl")
+
+[node name="Wall2" type="StaticBody2D" parent="."]
+collision_layer = 129
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall2"]
+position = Vector2(-30.5, 0)
+shape = SubResource("RectangleShape2D_fb2sj")
+
+[node name="Wall3" type="StaticBody2D" parent="."]
+collision_layer = 129
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall3"]
+position = Vector2(30.5, 0)
+shape = SubResource("RectangleShape2D_135y3")
+
+[node name="ReflectionComponent" parent="." instance=ExtResource("1_qh2i6")]
+collision_layer = 128
+collision_mask = 0
+
+[node name="CollisionShape2D" parent="ReflectionComponent" index="0"]
+position = Vector2(0, 3.88922)
+shape = SubResource("RectangleShape2D_s8qrv")
+
+[connection signal="rotation_registered" from="RotateComponent" to="." method="_on_rotation_registered"]
+[connection signal="deselected" from="SelectComponent" to="." method="_on_deselected"]
+[connection signal="selected" from="SelectComponent" to="." method="_on_selected"]
+
+[editable path="ReflectionComponent"]

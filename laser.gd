@@ -13,10 +13,12 @@ enum CollisionAction {STOP_RAY, CONTINUE_RAY, REFLECT_RAY}
 
 
 var _debug_line_points: PackedVector2Array
+var _reflection_points: PackedVector2Array
 
 
 func _physics_process(delta):
 	_debug_line_points = PackedVector2Array()
+	_reflection_points = PackedVector2Array()
 	_cast_ray(global_position, Vector2.RIGHT.rotated(global_rotation))
 	if $DebugLine.points != _debug_line_points:
 		$DebugLine.points = _debug_line_points
@@ -32,7 +34,7 @@ func _process_collision(collider: Object, normal: Vector2, source: Vector2, poin
 		collider.receive_damage()
 		return {"action": CollisionAction.CONTINUE_RAY}
 		
-	return {"action": CollisionAction.STOP_RAY}
+	return {"action": CollisionAction.STOP_RAY, "point": point}
 
 
 func _cast_ray(source: Vector2, direction: Vector2):
@@ -51,9 +53,14 @@ func _cast_ray(source: Vector2, direction: Vector2):
 				result = space_state.intersect_ray(query)
 			CollisionAction.STOP_RAY, CollisionAction.REFLECT_RAY: 
 				break
-	if collision_result.action == CollisionAction.REFLECT_RAY:
+	if collision_result.action == CollisionAction.REFLECT_RAY and not _reflection_points.has(collision_result.point):
 		# ! Recursion !
+		_reflection_points.append(collision_result.point)
 		_cast_ray(collision_result.point, collision_result.direction)
-	else:
+	elif collision_result.action == CollisionAction.CONTINUE_RAY:
 		_debug_line_points.append(to_local(ray_to))
+	else:
+		# Stop ray
+		print("Stop")
+		_debug_line_points.append(to_local(collision_result.point))
 

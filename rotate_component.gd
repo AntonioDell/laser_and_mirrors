@@ -1,3 +1,4 @@
+class_name RotateComponent
 extends Node2D
 
 ## [rotate_amount] in radians
